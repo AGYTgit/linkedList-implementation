@@ -14,7 +14,7 @@ public:
 class LinkedList {
 public:
     Node* head = nullptr;
-
+  
     void insert(int value) {
         Node* newNode = new Node(value);
         newNode->next = head;
@@ -196,6 +196,47 @@ public:
 
         return dummy->next;
     }
+
+
+    
+    static int findSubListCount(Node* head, int targetValue, int currentValue = 0, int temp = 0) {
+        if (head == nullptr) return 0;
+
+        int subListCount = 0;
+        int currentValueTemp = currentValue;
+        Node* currentNode = head;
+
+        for (int i = 0; currentNode != nullptr; i++) {
+            currentValue = currentValueTemp;
+
+            if (currentValue + currentNode->value <= targetValue) {
+                currentValue += currentNode->value;
+            } else {
+                return subListCount;
+            }
+
+            if (currentValue == targetValue) {
+                subListCount++;
+            }
+
+            currentNode = currentNode->next;
+            subListCount += findSubListCount(currentNode, targetValue, currentValue, temp + 1);
+        }
+
+        return subListCount;
+    }
 };
 
-int main() {}
+
+int main() {
+    LinkedList list;
+
+    list.append(2);
+    list.append(3);
+    list.append(5);
+    list.append(7);
+
+    cout << "sub list count: " << list.findSubListCount(list.head, 10) << endl;
+
+    return 0;
+}
